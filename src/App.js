@@ -1,5 +1,7 @@
 /** @format */
 
+import { useState } from "react";
+
 const initialFriends = [
   {
     id: 118836,
@@ -20,14 +22,26 @@ const initialFriends = [
     balance: 0,
   },
 ];
-
+function Button({ children, onClick }) {
+  return (
+    <button className="button" onClick={onClick}>
+      {children}
+    </button>
+  );
+}
 export default function App() {
+  const [showAddFriend, setShowAddFriend] = useState(false);
+  function handleShowForm() {
+    setShowAddFriend((show) => !show);
+  }
   return (
     <div className="app">
       <div className="sidebar">
         <FriendList />
-        <FormAddFriend />
-        <Button>Add Friend</Button>
+        {showAddFriend && <FormAddFriend />}
+        <Button onClick={handleShowForm}>
+          {showAddFriend ? "Close" : "Add Friend"}
+        </Button>
       </div>
       <FormSplitBill />
     </div>
@@ -65,9 +79,6 @@ function Friend({ friend }) {
     </li>
   );
 }
-function Button({ children }) {
-  return <button className="button">{children}</button>;
-}
 
 function FormAddFriend() {
   return (
@@ -85,7 +96,7 @@ function FormSplitBill() {
     <form className="form-split-bill">
       <h2>Split a bill with X</h2>
 
-      <label>🪙 Bill  value</label>
+      <label>🪙 Bill value</label>
       <input type="text"></input>
 
       <label>👤 Your expense</label>
@@ -99,6 +110,7 @@ function FormSplitBill() {
         <option value="user">You</option>
         <option value="friend">X</option>
       </select>
+      <Button>Split Bill</Button>
     </form>
   );
 }
